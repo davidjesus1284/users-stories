@@ -5,6 +5,7 @@ import { UserModule } from './components/user/user.module';
 import { ProductModule } from './components/product/product.module';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { ShoppingCartModule } from './components/shopping-cart/shopping-cart.module';
 import configSequelize  from 'src/utils/config';
 
 @Module({
@@ -13,7 +14,7 @@ import configSequelize  from 'src/utils/config';
     load: [configSequelize]
   }),
   SequelizeModule.forRoot(configSequelize()),
-  UserModule, ProductModule],
+  UserModule, ProductModule, ShoppingCartModule],
   controllers: [AppController],
   providers: [AppService],
 })

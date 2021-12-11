@@ -1,10 +1,10 @@
 import { Products } from '../models/products';
 export interface ProductInterface {
 
-    name: string;
-    sku: number;
-    price: number;
-    quantity: number;
+    name?: string;
+    sku?: number;
+    price?: number;
+    quantity?: number;
 };
 
 export interface ResultProductPaginate {
