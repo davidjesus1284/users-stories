@@ -67,7 +67,7 @@ export class ProductService {
     async updateProduct(productId: number, data: ProductInterface): Promise<[number, Products[]]> {
 
         try {
-            console.log("data en ProducService",data)
+            
             const consult = await this.products.update(data, {
                 where: {
                     productId
