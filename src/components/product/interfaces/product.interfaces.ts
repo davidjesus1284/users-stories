@@ -11,7 +11,7 @@ export interface ResultProductPaginate {
     previousPage: number;
     currentPage: number;
     nextPage: number;
-    total: number;
+    itemsTotal: number;
     limit: number;
     numberPages: number;
     data: Products[];

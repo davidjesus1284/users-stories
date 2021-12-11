@@ -4,6 +4,7 @@ import { Op } from 'sequelize';
 import { ProductInterface, ResultProductPaginate } from './interfaces/product.interfaces';
 import { Products } from './models/products';
 
+
 @Injectable()
 export class ProductService {
 
@@ -22,29 +23,12 @@ export class ProductService {
         }
     }
 
-    async getAllProduct(limit, skip, where, price1, price2): Promise<ResultProductPaginate> {
+    async getAllProduct(limit, skip, where): Promise<ResultProductPaginate> {
 
         try {
-            console.log("impresion de where", where);
-            const option = ["name", "sku", "quantity"]
-            let condition = {};
-            where.forEach(element => {
-                for (const key in element) {
-                    
-                    if (option.includes(key)) {
-                        console.log(element[key])
-                        condition[key] = Number(element[key])
-                    }
-                }
-            });
-            console.log("impresion de condicion", condition);
+            where = this.conditions(where);
             let options = {
-                where: {
-                    ...condition,
-                    price: {
-                        [Op.between]: [price1, price2]
-                    }
-                },
+                where,
                 offset: this.getOffset(skip, limit),
                 limit: limit,
             };
@@ -54,7 +38,7 @@ export class ProductService {
                 previousPage: this.getPreviousPage(skip),
                 currentPage: skip,
                 nextPage: this.getNextPage(skip, limit, count),
-                total: count,
+                itemsTotal: count,
                 limit: limit,
                 numberPages: this.getNumberPages(count, limit),
                 data: rows,
@@ -65,13 +49,39 @@ export class ProductService {
         }
     }
 
-    // async getOneProduct() {
-    //     try {
-            
-    //     } catch (error) {
-    //         return error;
-    //     }
-    // }
+    conditions(where) {
+        try {
+            const option = ["name", "sku", "quantity"]
+            const ranged = ["price1", "price2"];
+            let condition = {};
+            let rangedPrice = [];
+            where.forEach(element => {
+                for (const key in element) {
+                    if (option.includes(key)) {
+                        console.log(element[key])
+                        condition[key] = Number(element[key])
+                    }
+                    if (ranged.includes(key)) {
+                        rangedPrice.push(Number(element[key])); 
+                    }
+                }
+            });
+            if (rangedPrice.length > 0) {
+                return where = {
+                    ...condition,
+                    price: {
+                        [Op.between]: rangedPrice
+                    }
+                }
+            } else {
+                return where = {
+                    ...condition,
+                }
+            }
+        } catch (error) {
+            return error;
+        }
+    }
 
     getOffset(page: number, limit: number) {
         return (page * limit) - limit;

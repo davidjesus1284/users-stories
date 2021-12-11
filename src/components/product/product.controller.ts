@@ -2,13 +2,16 @@ import { Body, Controller, Post, Res, HttpStatus, Param, Get, Query } from '@nes
 import { Response } from 'express';
 import { ProductDTO } from './dto/productDTO';
 import { ProductService } from './product.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductController {
 
     constructor(private productService: ProductService) {}
 
     @Post('/')
+    @ApiOperation({ summary: 'Servicio para crear productos'})
     async createOne(@Res() res: Response, @Body() product: ProductDTO) {
 
         try {
@@ -27,16 +30,14 @@ export class ProductController {
     }
 
     @Get('/')
-    async getAll(@Res() res: Response, @Query() query ) {
+    @ApiOperation({ summary: 'Consulta de productos paginados segun rango de precios, nombre, sku o cantidad disponible'})
+    async getAll(@Res() res: Response, @Query() query: any ) {
 
         try {
             const limit = parseInt(query.limit);
             const skip = parseInt(query.skip);
-            const price1 = parseInt(query.price1)
-            const price2 = parseInt(query.price2)
-            console.log(query);
             const conditions = [query]
-            const result = await this.productService.getAllProduct(limit, skip, conditions, price1, price2);
+            const result = await this.productService.getAllProduct(limit, skip, conditions);
             return res.status(HttpStatus.OK).json({
                 state: true,
                 result
