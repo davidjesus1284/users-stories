@@ -49,6 +49,37 @@ export class ProductService {
         }
     }
 
+    async getAll(productId: number): Promise<any> {
+        try {
+            const consult = await this.products.findOne({
+                where: { productId }
+            });
+            const { productId: id, name, price, sku, quantity } = consult;
+            const data = {
+                productId: id, name, price, sku, quantity
+            }
+            return data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async updateProduct(productId: number, data: ProductInterface): Promise<[number, Products[]]> {
+
+        try {
+            console.log("data en ProducService",data)
+            const consult = await this.products.update(data, {
+                where: {
+                    productId
+                }
+            });
+            console.log(consult);
+            return consult;
+        } catch (error) {
+            return error;
+        }
+    }
+
     conditions(where) {
         try {
             const option = ["name", "sku", "quantity"]
