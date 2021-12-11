@@ -12,3 +12,9 @@ export class DeleteProductsDTO {
     shoppingCartId: number;
     productId: number;
 }
+
+export class UpdateQuantityProducts {
+    shoppingCartId: number;
+    productId: number;
+    quantity: number;
+}
