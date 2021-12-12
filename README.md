@@ -1,6 +1,6 @@
 ## Documentación donde estan todas las rutas del servidor
 
-[Postman](https://documenter.getpostman.com/view/7918195/UVJhCZiG)
+[Postman](https://documenter.getpostman.com/view/7918195/UVR5qU69)
 
 ## Resumen
 
