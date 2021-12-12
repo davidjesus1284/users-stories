@@ -1,4 +1,4 @@
-export class OrderDTO {
+export class CartDTO {
     userId:    number;
     productId: number;
     products:  Product[];
