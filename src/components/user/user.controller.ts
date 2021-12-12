@@ -2,13 +2,16 @@ import { Body, Controller, Post, Res, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
 import { UserDTO } from './dto/userDTO';
 import { UserService } from './user.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Servicio para crear usuarios')
 @Controller('users')
 export class UserController {
 
     constructor(private usersService: UserService) {}
 
     @Post('/')
+    @ApiOperation({ summary: 'Servicio para crear usuarios'})
     async createOne(@Res() res: Response, @Body() user: UserDTO) {
         
         try {

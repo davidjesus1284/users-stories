@@ -2,13 +2,16 @@ import { Body, Controller, Post, Res, HttpStatus, Put, Delete } from '@nestjs/co
 import { Response } from 'express';
 import { DeleteProductsDTO, UpdateQuantityProducts, CartDTO } from './dto/cartDTO';
 import { ShoppingCartService } from './shopping-cart.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Se ingresan los pedidos que requiera el usuario')
 @Controller('shopping-carts')
 export class ShoppingCartController {
 
     constructor(private shoppingCartService: ShoppingCartService) {}
 
     @Post('/')
+    @ApiOperation({ summary: 'Creacion de un pedido'})
     async createOneOrder(
         @Res() res: Response, 
         @Body() order: CartDTO ) {
@@ -31,6 +34,7 @@ export class ShoppingCartController {
         }
     
     @Delete('/delete/products')
+    @ApiOperation({ summary: 'Elimina un producto de un pedido creado'})
     async deleteProducts(@Res() res: Response, @Body() productsDelete: DeleteProductsDTO) {
 
         try {
@@ -50,6 +54,7 @@ export class ShoppingCartController {
     }
 
     @Put('/update/quantity/products')
+    @ApiOperation({ summary: 'Actualiza la cantidad de un producto en un pedido'})
     async updateQuantityProduct(@Res() res: Response, @Body() quantityProduct: UpdateQuantityProducts) {
 
         try {

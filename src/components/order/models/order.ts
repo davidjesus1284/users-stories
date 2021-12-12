@@ -62,12 +62,15 @@ export class Order extends Model {
     @Column
     deletedAt: Date;
 
+    // Hace referencia a una tabla por la llave foranea
     @BelongsTo( () => Payment, 'paymentId')
     payment!: Payment;
 
+    // Hace referencia a una tabla por la llave foranea
     @BelongsTo( () => Users, 'userId')
     users!: Users
 
+    // Hace referencia a una tabla por la llave foranea
     @BelongsTo( () => ShoppingCart, 'shoppingCartId')
     shoppingCart!: ShoppingCart;
 }

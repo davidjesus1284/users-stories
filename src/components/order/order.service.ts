@@ -16,6 +16,7 @@ export class OrderService {
         private shoppingCartService: ShoppingCartService
     ) {}
 
+    // Metodo que crea la orden y inhabilita el pedido en el carrito
     async createOrder(order: OrderInter): Promise<Order> {
 
         try {
@@ -27,6 +28,7 @@ export class OrderService {
         }
     }
 
+    // Este metodo se encarga de consultar el historial de pedido que tenga un usuario especifico
     async getOrderByUserId(userId: number): Promise<AllOrders[]> {
 
         try {

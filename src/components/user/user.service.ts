@@ -12,6 +12,7 @@ export class UserService {
         private users: typeof Users
     ) {}
 
+    // Metodo para crear usuarios que realizaran pedidos
     async createUsers(users: UsersInterface): Promise<Users> {
 
         try {

@@ -11,6 +11,7 @@ export class PaymentService {
         private payment: typeof Payment
     ) {}
 
+    // Metodo para crear los medios de pagos
     async createPayment(data: PaymentInterface): Promise<Payment> {
 
         try {
@@ -20,7 +21,7 @@ export class PaymentService {
             return error;
         }
     }
-
+    // Metodo que obtiene los metodos de pagos por id
     async getPaymentById(paymentId: number): Promise<Payment> {
 
         try {
