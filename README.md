@@ -33,24 +33,14 @@ Debera crar el archivo .env y colocara la siguiente informacion:
 
 ## Explicación de rutas
 
+[Swagger](http://localhost:4200/api/users-stories/docs/#/)
 * Metodo POST /api/users-stories/users Esta ruta se utiliza para crear usuarios este es el cuerpo de uso:
 
-- {
-    "name": "David",
-    "lastName": "Escalante",
-    "email": "davidjesus1284@gmail.com",
-    "username": "descalante1416",
-    "password": "123456789"
-}
+- {"name": "user1", "lastName": "user1", "email": "user@gmail.com", "username": "user123","password": "123456789"}
 
 * Metodo POST /api/users-stories/products Sirve para poder crear productos cuerpo de uso: 
 
-- {
-    "name": "Silla Gamer Roja",
-    "sku": 3456,
-    "price": 1300,
-    "quantity": 7
-}
+- {"name": "Silla Gamer Roja", "sku": 3456, "price": 1300, "quantity": 7}
 
 *
 
@@ -65,19 +55,15 @@ Debera crar el archivo .env y colocara la siguiente informacion:
 - quantity: cantidad de producto
 
 * Metodo POST /api/users-stories/shopping-carts/ Se crea los pedidos en el carrito de compras. Este es su cuerpo:
-- {
-    "userId": 1,
-    "products": [
-        { "productsId": 6, "quantity": 2},
-        { "productsId": 2, "quantity": 3}
-    ]
-}
+- {"userId": 1,"products": [{ "productsId": 6, "quantity": 2},{ "productsId": 2, "quantity": 3}]}
 
 * Metodo DELETE /api/users-stories/shopping-carts/delete/products Se encarga de eliminar un producto por id de producto en un pedido. Cuerpo de uso: 
-- {
-    "shoppingCartId": 6,
-    "productId": 6
-}
+- {"shoppingCartId": 6, "productId": 6}
+
+* Metodo PUT /api/users-stories/shopping-carts/update/quantity/products Se actualiza la cantidad de un producto especifico del pedido. Cuerpo de solicitud: 
+- {"shoppingCartId": 6, "productId": 2, "quantity": 4}
+
+* 
 
 ## Comenzar la aplicación con el siguiente comando
 
