@@ -95,7 +95,7 @@ export class ProductService {
                 for (const key in element) {
                     if (option.includes(key)) {
                         console.log(element[key])
-                        condition[key] = Number(element[key])
+                        condition[key] = element[key]
                     }
                     if (ranged.includes(key)) {
                         rangedPrice.push(Number(element[key])); 
