@@ -4,14 +4,14 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { OrderDTO } from './dto/orderDTO';
 
-@ApiTags('Realizar pedidos')
+@ApiTags('Realizar pedidos') // Titulo del endpoint
 @Controller('orders')
 export class OrderController {
     
     constructor(private orderService: OrderService) {}
 
     @Post('/')
-    @ApiOperation({ summary: 'Creación de una orde almacenada en el carrito de compras'})
+    @ApiOperation({ summary: 'Creación de una orde almacenada en el carrito de compras'}) // Indica que realiza el endpoint
     async createOneOrder(@Res() res: Response, @Body() order: OrderDTO) {
 
         try {
@@ -30,7 +30,7 @@ export class OrderController {
     }
 
     @Get('/:userId')
-    @ApiOperation({ summary: 'Consulta de ordenes por usuarios'})
+    @ApiOperation({ summary: 'Consulta de ordenes por usuarios'}) // Indica que realiza el endpoint
     async getAllOrden(@Res() res: Response, @Param('userId', ParseIntPipe) userId: string) {
 
         try {

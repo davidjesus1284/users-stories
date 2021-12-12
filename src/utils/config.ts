@@ -11,3 +11,4 @@ export default (): SequelizeModuleOptions  => ({
     autoLoadModels: true,
     synchronize: true
 });
+// Este archivo contiene la configuracion necesaria para que sequelize se conecte con la base de datos

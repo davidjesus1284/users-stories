@@ -14,6 +14,8 @@ export class ShoppingCartService {
         private productService: ProductService
     ) {}
 
+    // Metodo que crea un pedido en el carrito y lo descuenta de la cantidad disponible del producto
+    // Si el producto no esta disponible se enviara un mensaje de aviso indicando cual producto no esta disponible
     async createOrder(order: OrderInterface): Promise<ShoppingCart | any> {
 
         try {
@@ -35,6 +37,7 @@ export class ShoppingCartService {
         }
     }
 
+    // Este metodo elimina un producto del carrito de compras y retorda la cantidad a la tabla de productos
     async deleteProducts(shoppingCartId: number, productId: number): Promise<ShoppingCart> {
 
         try {
@@ -56,6 +59,7 @@ export class ShoppingCartService {
         }
     }
 
+    // Metodo que actualiza la cantidad de un producto por el id y actualiza la tabla producto segun la cantidad indicada
     async updateProductCart(shoppingCartId: number, productId: number, quantity: number): Promise<ShoppingCart | any> {
         try {
             
@@ -75,6 +79,7 @@ export class ShoppingCartService {
         }
     }
 
+    // Metodo para consultar un pedido por el id del carrito
     async getOneShoppingCart(shoppingCartId: number): Promise<ShoppingCart> {
 
         try {
@@ -85,6 +90,7 @@ export class ShoppingCartService {
         }
     }
 
+    // Actualiza el pedido en el carrito de compras
     async updateShoppingCart(shoppingCartId: number, data: ProductsDelete): Promise<ShoppingCart> {
 
         try {
@@ -102,6 +108,7 @@ export class ShoppingCartService {
         }
     }
 
+    // Este metodo se encarga de buscar los productos en la tabla products los descuenta y luego los actualiza segun el pedido
     async getAllOrderByProductId(products: Product[]): Promise<Products[] | any> {
         
         try {
@@ -110,7 +117,7 @@ export class ShoppingCartService {
             for (const p of products) {
                 if (p != undefined) {
                     
-                    let consultProduct = await this.productService.getAll(p.productsId);
+                    let consultProduct = await this.productService.getOne(p.productsId);
                     if (consultProduct.quantity == 0) {
                         return {state: false, message: `No hay disponible ${consultProduct.name} en stock`};
                     }
@@ -131,18 +138,19 @@ export class ShoppingCartService {
         }
     }
 
+    // Metodo auxiliar para realizar logica en metodo de update que se encarga de indicar si va a necesitar mas cantidad de un producto o lo devolvera
     async auxUpdateProductCart(products: any, productId: number, quantity) {
 
         try {
             for (const product of products) {
                 if (product.productId == productId) {
                     if (product.quantity > quantity) {
-                        let consultProduct = await this.productService.getAll(product.productId);
+                        let consultProduct = await this.productService.getOne(product.productId);
                         const dataProductUpdate = { quantity: consultProduct.quantity + (product.quantity - quantity) };
                         
                         await this.productService.updateProduct(product.productId, dataProductUpdate);
                     } else {
-                        let consultProduct = await this.productService.getAll(product.productId);
+                        let consultProduct = await this.productService.getOne(product.productId);
                         const dataProductUpdate = { quantity: consultProduct.quantity - (quantity - product.quantity) };
                         if (dataProductUpdate.quantity < 0) {
                             return 'Esta excediendo la cantidad disponible en stock'
@@ -156,6 +164,7 @@ export class ShoppingCartService {
         }
     }
 
+    // Metodo para actualizar la cantidad de producto especificad es un auxiliar del metodo de actualizar
     auxProductUp(products: any, productQuantityUpdate: any, productId: number, quantity: number) {
 
         products = JSON.stringify(productQuantityUpdate.map( product => {
@@ -174,12 +183,13 @@ export class ShoppingCartService {
         return products;
     }
 
+    // Metodo auxiliar para el momento que se elimine un producto y se retorne la cantidad que se pidio, al tabla de producto
     async auxDelectProduct(productsDelete: any, productId: number) {
 
         try {
             for (const pd of productsDelete) {
                 if (pd.productId == productId) {
-                    let consultProduct = await this.productService.getAll(pd.productId);
+                    let consultProduct = await this.productService.getOne(pd.productId);
                     const dataProductUpdate = { quantity: consultProduct.quantity + pd.quantity };
                     await this.productService.updateProduct(pd.productId, dataProductUpdate);
                 }

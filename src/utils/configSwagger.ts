@@ -6,3 +6,5 @@ export const config = new DocumentBuilder()
 .setVersion('1.0')
 .addTag('Rutas del servidor')
 .build();
+
+// Configuracion que debe utilizar swagger para su funcionalidad

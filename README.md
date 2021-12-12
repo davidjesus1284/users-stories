@@ -1,73 +1,98 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+## Documentación donde estan todas las rutas del servidor
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[Postman](https://documenter.getpostman.com/view/7918195/UVJhCZiG)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Resumen
 
-## Description
+Esta aplicación se encarga del manejo de historias de usuarios en un api de E-commerce
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Framework y paquetes utilizado
 
-## Installation
+- Nest.js
+- @nestjs/sequelize
+- @nestjs/swagger 4.8.2
+- bcrypt
+- mysql2
+- sequelize
+- sequelize-typescript
+- swagger-ui-express 4.1.6
+## Instrucciones para su configuración
 
-```bash
+Despues de clonar el proyecto haga los siguientes paso:
+``````````
 $ npm install
-```
+``````````
+Debera crar el archivo .env y colocara la siguiente informacion:
 
-## Running the app
+- MYSQ_DB_HOST=127.0.0.1
+- MYSQ_DB_PORT=3306
+- MYSQ_DB_USERNAME=root
+- MYSQ_DB_PASSWORD=''
+- MYSQ_DB_DATABASE=users_stories
+- PORT=4200
+
+## Explicación de rutas
+
+* Metodo POST /api/users-stories/users Esta ruta se utiliza para crear usuarios este es el cuerpo de uso:
+
+- {
+    "name": "David",
+    "lastName": "Escalante",
+    "email": "davidjesus1284@gmail.com",
+    "username": "descalante1416",
+    "password": "123456789"
+}
+
+* Metodo POST /api/users-stories/products Sirve para poder crear productos cuerpo de uso: 
+
+- {
+    "name": "Silla Gamer Roja",
+    "sku": 3456,
+    "price": 1300,
+    "quantity": 7
+}
+
+*
+
+* Metodo GET /api/users-stories/products?limit=4&skip=1&price1=500&price2=2000 Se obtine informacion de los productos existente segun el rango de precios, cantidad, nombres y codigo sku ademas de traer la data paginada
+
+- limit: Indicas cuantos objetos vendran de la base de datos
+- skip: Aca se indica la pagina que va a visualizar
+- price1: Precio inicial
+- price2: Precio final
+- name: nombre de producto
+- sku: codigo de stock de productos
+- quantity: cantidad de producto
+
+* Metodo POST /api/users-stories/shopping-carts/ Se crea los pedidos en el carrito de compras. Este es su cuerpo:
+- {
+    "userId": 1,
+    "products": [
+        { "productsId": 6, "quantity": 2},
+        { "productsId": 2, "quantity": 3}
+    ]
+}
+
+* Metodo DELETE /api/users-stories/shopping-carts/delete/products Se encarga de eliminar un producto por id de producto en un pedido. Cuerpo de uso: 
+- {
+    "shoppingCartId": 6,
+    "productId": 6
+}
+
+## Comenzar la aplicación con el siguiente comando
 
 ```bash
 # development
-$ npm run start
+$ npm run dev
 
-# watch mode
-$ npm run start:dev
+## Additional note:
 
-# production mode
-$ npm run start:prod
+Si usted no posee instalado la base de datos de PostgreSQL puede ejecutar el siguiente comando:
+
+$ docker-composer up
+$ Ingreso: http://127.0.0.1/login?next=%2F
+
+Nota: en el archivo docker-compose hay una sección que se llama environment, alli debera especificar las credenciales que va usar en su base de datos las mismas que usara en el archivo de variables de entorno.
+
+Recuerde que, para que funcione, debera tener instalado docker en su computadora y debera de iniciarlo luego podra ejecutar el comando indicado.
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

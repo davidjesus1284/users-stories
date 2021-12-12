@@ -13,6 +13,7 @@ export class ProductService {
         private products: typeof Products
     ) {}
 
+    // Metodo que crea los productos en la tabla products
     async createProducts(product: ProductInterface): Promise<Products> {
 
         try {
@@ -23,6 +24,7 @@ export class ProductService {
         }
     }
 
+    // Este metodo resuelte la consulta de productos filtrados y lo retorna con paginación
     async getAllProduct(limit, skip, where): Promise<ResultProductPaginate> {
 
         try {
@@ -49,7 +51,8 @@ export class ProductService {
         }
     }
 
-    async getAll(productId: number): Promise<any> {
+    // Metodo que trae un producto por id
+    async getOne(productId: number): Promise<any> {
         try {
             const consult = await this.products.findOne({
                 where: { productId }
@@ -64,6 +67,7 @@ export class ProductService {
         }
     }
 
+    // Metodo que actualiza productos por id
     async updateProduct(productId: number, data: ProductInterface): Promise<[number, Products[]]> {
 
         try {
@@ -71,15 +75,16 @@ export class ProductService {
             const consult = await this.products.update(data, {
                 where: {
                     productId
-                }
+                },
+                individualHooks: true
             });
-            console.log(consult);
             return consult;
         } catch (error) {
             return error;
         }
     }
 
+    // Este metodo crea la condición de consulta a la db segun el filtro y el rango de precios
     conditions(where) {
         try {
             const option = ["name", "sku", "quantity"]
@@ -114,10 +119,12 @@ export class ProductService {
         }
     }
 
+    // Metodo que sirve para procesar la paginación
     getOffset(page: number, limit: number) {
         return (page * limit) - limit;
     }
 
+    // Indica cual sera la proxima pagina
     getNextPage(page: number, limit: number, total: number) {
         if ((total/limit) > page) {
             return page + 1;
@@ -125,6 +132,7 @@ export class ProductService {
     
         return null
     }
+    // Indica cual es la pagina actual
     getPreviousPage (page: number) {
         if (page <= 1) {
             return null
@@ -132,10 +140,12 @@ export class ProductService {
         return page - 1;
     }
 
+    // Indica el numero de paginas existente en consulta
     getNumberPages(count: number, limit: number) {
         return (Math.round(count / limit));
     }
 
+    // Metodo que muestra como se visualizara la data de los productos
     transform(records) {
         return records.map( record => {
             return {
