@@ -30,7 +30,8 @@ export class ShoppingCartService {
                 products: JSON.stringify(productOrden)
             }
             
-            const createOne = await this.shoppingCart.create(data);
+            let createOne = await this.shoppingCart.create(data);
+            createOne.products = JSON.parse(createOne.products);
             return createOne;
         } catch (error) {
             return error;
