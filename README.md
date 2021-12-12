@@ -51,16 +51,17 @@ En el enlace indicado se mostrada una interfaz grafica de todas las rutas del se
 
 ```bash
 # development
-$ npm run dev
+$ npm run start:dev
+
+# build
+$ npm run build
+Si tiene un servidor de desarrollo ejecuta el comando para su compilación
 
 ## Additional note:
+Se necesita crear simplemente la base de dato en este caso yo la llame users_stories, pero puede colocarle el nombre que desee. Despues de creada la base de datos simplemente inicie el servidor con el comando de desarrollo y el servicio creara todas las tablas automaticamente con sus respectivas uniones.
 
-Si usted no posee instalado la base de datos de PostgreSQL puede ejecutar el siguiente comando:
-
-$ docker-composer up
-$ Ingreso: http://127.0.0.1/login?next=%2F
-
-Nota: en el archivo docker-compose hay una sección que se llama environment, alli debera especificar las credenciales que va usar en su base de datos las mismas que usara en el archivo de variables de entorno.
-
-Recuerde que, para que funcione, debera tener instalado docker en su computadora y debera de iniciarlo luego podra ejecutar el comando indicado.
 ```
+
+## Imagen de la base de datos: 
+
+<img src"./img/ImagenDB.jpeg">
