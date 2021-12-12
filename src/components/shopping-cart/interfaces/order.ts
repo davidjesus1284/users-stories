@@ -10,5 +10,6 @@ export interface Product {
 }
 export interface ProductsDelete {
 
-    products: string;
+    products?: string;
+    state?: boolean;
 }

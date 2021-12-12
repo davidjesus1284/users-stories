@@ -20,14 +20,14 @@ export class ShoppingCartService {
             
             const products = order.products;
             const productOrden = await this.getAllOrderByProductId(products);
-            if (!productOrden.state) {
+            if (productOrden.state == false) {
                 return productOrden.message;
             }
             const data = {
                 userId: order.userId,
                 products: JSON.stringify(productOrden)
             }
-            console.log(data);
+            
             const createOne = await this.shoppingCart.create(data);
             return createOne;
         } catch (error) {
@@ -41,13 +41,7 @@ export class ShoppingCartService {
             const consult = await this.getOneShoppingCart(shoppingCartId);
             let { products } = consult;
             let productsDelete: any = JSON.parse(products);
-            for (const pd of productsDelete) {
-                if (pd.productId == productId) {
-                    let consultProduct = await this.productService.getAll(pd.productId);
-                    const dataProductUpdate = { quantity: consultProduct.quantity + pd.quantity };
-                    await this.productService.updateProduct(pd.productId, dataProductUpdate);
-                }
-            }
+            await this.auxDelectProduct(productsDelete, productId);
             products = JSON.stringify(productsDelete.filter( pd => {
                 if (pd.productId != productId) {
                    return pd;
@@ -67,37 +61,13 @@ export class ShoppingCartService {
             
             let { products } = await this.getOneShoppingCart(shoppingCartId);
             const productQuantityUpdate = JSON.parse(products);
-            for (const product of productQuantityUpdate) {
-                if (product.productId == productId) {
-                    if (product.quantity > quantity) {
-                        let consultProduct = await this.productService.getAll(product.productId);
-                        const dataProductUpdate = { quantity: consultProduct.quantity + (product.quantity - quantity) };
-                        
-                        await this.productService.updateProduct(product.productId, dataProductUpdate);
-                    } else {
-                        let consultProduct = await this.productService.getAll(product.productId);
-                        const dataProductUpdate = { quantity: consultProduct.quantity - (quantity - product.quantity) };
-                        if (dataProductUpdate.quantity < 0) {
-                            return 'Esta excediendo la cantidad disponible en stock'
-                        }
-                        await this.productService.updateProduct(product.productId, dataProductUpdate);
-                    }
-                }
+            if (productQuantityUpdate.length == 0) {
+                return 'No hay productos en el carrito';
             }
-            products = JSON.stringify(productQuantityUpdate.map( product => {
-                if (product.productId == productId) {
-                    
-                    if (product.quantity > quantity) {
-                        product.quantity = product.quantity - (product.quantity - quantity)
-                    } else {
-                        product.quantity = product.quantity + (quantity - product.quantity)
-                    }
-                    
-                }
-                return product;
-            }));
+            await this.auxUpdateProductCart(productQuantityUpdate, productId, quantity);
+            products = this.auxProductUp(products, productQuantityUpdate, productId, quantity);
             const data = { products }
-            console.log(data);
+            
             const response = await this.updateShoppingCart(shoppingCartId, data);
             return JSON.parse(response.products);
         } catch (error) {
@@ -108,11 +78,7 @@ export class ShoppingCartService {
     async getOneShoppingCart(shoppingCartId: number): Promise<ShoppingCart> {
 
         try {
-            const consult = await this.shoppingCart.findOne({
-                where: {
-                    shoppingCartId
-                }
-            });
+            const consult = await this.shoppingCart.findOne({ where: {shoppingCartId}});
             return consult;
         } catch (error) {
             return error;
@@ -140,7 +106,7 @@ export class ShoppingCartService {
         
         try {
             let response: Products[] = [];
-            let message: string;
+            
             for (const p of products) {
                 if (p != undefined) {
                     
@@ -158,8 +124,66 @@ export class ShoppingCartService {
                     await this.productService.updateProduct(p.productsId, dataProductUpdate);
                 }
             }
-            return response
+            return response;
             
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async auxUpdateProductCart(products: any, productId: number, quantity) {
+
+        try {
+            for (const product of products) {
+                if (product.productId == productId) {
+                    if (product.quantity > quantity) {
+                        let consultProduct = await this.productService.getAll(product.productId);
+                        const dataProductUpdate = { quantity: consultProduct.quantity + (product.quantity - quantity) };
+                        
+                        await this.productService.updateProduct(product.productId, dataProductUpdate);
+                    } else {
+                        let consultProduct = await this.productService.getAll(product.productId);
+                        const dataProductUpdate = { quantity: consultProduct.quantity - (quantity - product.quantity) };
+                        if (dataProductUpdate.quantity < 0) {
+                            return 'Esta excediendo la cantidad disponible en stock'
+                        }
+                        await this.productService.updateProduct(product.productId, dataProductUpdate);
+                    }
+                }
+            }
+        } catch (error) {
+            return error;
+        }
+    }
+
+    auxProductUp(products: any, productQuantityUpdate: any, productId: number, quantity: number) {
+
+        products = JSON.stringify(productQuantityUpdate.map( product => {
+            if (product.productId == productId) {
+                
+                if (product.quantity > quantity) {
+                    product.quantity = product.quantity - (product.quantity - quantity)
+                } else {
+                    product.quantity = product.quantity + (quantity - product.quantity)
+                }
+                
+            }
+            return product;
+        }));
+
+        return products;
+    }
+
+    async auxDelectProduct(productsDelete: any, productId: number) {
+
+        try {
+            for (const pd of productsDelete) {
+                if (pd.productId == productId) {
+                    let consultProduct = await this.productService.getAll(pd.productId);
+                    const dataProductUpdate = { quantity: consultProduct.quantity + pd.quantity };
+                    await this.productService.updateProduct(pd.productId, dataProductUpdate);
+                }
+            }
         } catch (error) {
             return error;
         }

@@ -1,6 +1,6 @@
-import { Body, Controller, Param, Post, Res, ParseIntPipe, HttpStatus, Headers } from '@nestjs/common';
+import { Body, Controller, Post, Res, HttpStatus, Put, Delete } from '@nestjs/common';
 import { Response } from 'express';
-import { DeleteProductsDTO, OrderDTO, UpdateQuantityProducts } from './dto/orderDTO';
+import { DeleteProductsDTO, UpdateQuantityProducts, CartDTO } from './dto/cartDTO';
 import { ShoppingCartService } from './shopping-cart.service';
 
 @Controller('shopping-carts')
@@ -11,7 +11,7 @@ export class ShoppingCartController {
     @Post('/')
     async createOneOrder(
         @Res() res: Response, 
-        @Body() order: OrderDTO ) {
+        @Body() order: CartDTO ) {
             
             try {
                 const consult = await this.shoppingCartService.createOrder(order);
@@ -30,7 +30,7 @@ export class ShoppingCartController {
             }
         }
     
-    @Post('/delete/Products')
+    @Delete('/delete/products')
     async deleteProducts(@Res() res: Response, @Body() productsDelete: DeleteProductsDTO) {
 
         try {
@@ -49,7 +49,7 @@ export class ShoppingCartController {
         }
     }
 
-    @Post('/update/quantity/products')
+    @Put('/update/quantity/products')
     async updateQuantityProduct(@Res() res: Response, @Body() quantityProduct: UpdateQuantityProducts) {
 
         try {
