@@ -64,4 +64,4 @@ Se necesita crear simplemente la base de dato en este caso yo la llame users_sto
 
 ## Imagen de la base de datos: 
 
-<img src"./img/ImagenDB.jpeg">
+<img src="./img/ImagenDB.jpeg">
